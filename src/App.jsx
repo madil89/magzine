@@ -28,6 +28,14 @@ function App() {
         Next Image
 
       </button>
+      <button
+        type="button"
+        disabled={currentImage === assetManager.images.length - 1}
+        onClick={() => setCurrentImage(currentImage + 1)}
+      >
+        Next Image
+
+      </button>
     </div>
   );
 }
