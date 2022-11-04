@@ -1,41 +1,22 @@
-import { useState } from 'react';
-import assetManager from './assets/assetManager';
-import './App.css';
+// import './App.css';
+import Container from '@mui/material/Container';
+import React from 'react';
+import ResponsiveAppBar from './components/ResponsiveAppBar';
+
+import EditorNote from './components/EditorNote';
+import PreviousMagazine from './components/PreviousMagazine';
+import CurrentMagazine from './components/CurrentMagazine';
 
 function App() {
-  const [currentImage, setCurrentImage] = useState(0);
   return (
-    <div className="App">
-      <button
-        type="button"
-        disabled={currentImage === 0}
-        onClick={() => setCurrentImage(currentImage - 1)}
-      >
-        Previous Image
+    <div>
+      <ResponsiveAppBar />
+      <Container maxWidth="xlg">
+        <CurrentMagazine />
+        <EditorNote />
+        <PreviousMagazine />
+      </Container>
 
-      </button>
-      <img
-        src={assetManager.images[currentImage].src}
-        key={assetManager.images[currentImage].alt}
-        alt={assetManager.images[currentImage].alt}
-        style={{ height: '90vh', marginTop: '10px' }}
-      />
-      <button
-        type="button"
-        disabled={currentImage === assetManager.images.length - 1}
-        onClick={() => setCurrentImage(currentImage + 1)}
-      >
-        Next Image
-
-      </button>
-      <button
-        type="button"
-        disabled={currentImage === assetManager.images.length - 1}
-        onClick={() => setCurrentImage(currentImage + 1)}
-      >
-        Next Image
-
-      </button>
     </div>
   );
 }
