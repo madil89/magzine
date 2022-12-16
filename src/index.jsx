@@ -11,6 +11,8 @@ import './index.css';
 import { Provider } from 'react-redux';
 import App from './App';
 import store from './store';
+import Image from './components/Image';
+import assetManager from './assets/initMagazine';
 // import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,7 +23,8 @@ root.render(
           <Route path="/magazines" element={<App />}>
             <Route path=":id" element={<App />} />
           </Route>
-          <Route path="*" element={<App />} />
+          <Route path="/test" element={<Image imageList={assetManager.issue18Images} />} />
+          <Route path="/" element={<App />} />
         </Routes>
       </BrowserRouter>
     </Provider>

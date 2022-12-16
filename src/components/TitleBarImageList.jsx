@@ -6,18 +6,15 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import PropTypes from 'prop-types';
-// import assetManager from '../assets/assetManager';
-import { useSelector } from 'react-redux';
 
-export default function TitlebarImageList({ onImageSelect }) {
-  const magazines = useSelector((state) => state.magazine[0]);
+export default function TitlebarImageList({ onImageSelect, images }) {
   return (
-    <ImageList sx={{ width: '100%', marginLeft: 1 }}>
-      {magazines.images.map((item) => (
+    <ImageList cols={3} sx={{ maxWidth: '100%', marginLeft: 1, height: '80vh' }}>
+      {images.map((item) => (
         <ImageListItem key={item.id}>
           <img
-            src={`${item.src}?w=248&fit=crop&auto=format`}
-            srcSet={`${item.src}?w=248&fit=crop&auto=format&dpr=2 2x`}
+            src={`${item.src}?w=161&fit=crop&auto=format`}
+            srcSet={`${item.src}?w=161&fit=crop&auto=format&dpr=2 2x`}
             alt={item.title}
             loading="lazy"
             onClick={() => onImageSelect(item)}
@@ -43,4 +40,13 @@ export default function TitlebarImageList({ onImageSelect }) {
 
 TitlebarImageList.propTypes = {
   onImageSelect: PropTypes.func.isRequired,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      src: PropTypes.string.isRequired,
+      alt: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      author: PropTypes.string.isRequired,
+    }).isRequired,
+  ).isRequired,
 };
