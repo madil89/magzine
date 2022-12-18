@@ -14,12 +14,10 @@ function Image({ imageList }) {
             <img
               src={image.src}
               alt={image.alt}
-              style={{ marginTop: 16, height: '80vh', maxWidth: '100%' }}
+              style={{ marginTop: 16, height: '72vh', maxWidth: '100%' }}
             />
-
           </div>
         ))}
-
       </EnhancedSwipeableViews>
 
       <Box marginTop={1} marginBottom={10} sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>

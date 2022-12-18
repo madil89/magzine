@@ -8,11 +8,13 @@ import { useParams } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
 import TitlebarImageList from './TitleBarImageList';
+import MagazineDialog from './MagazineDialog';
 // import Carousal from './Carousal';
 
 const EnhancedSwipeableViews = bindKeyboard(SwipeableViews);
 
 function CurrentMagazine() {
+  const [openDialog, setOpenDialog] = React.useState(false);
   const [index, setIndex] = React.useState(0);
   const magazines = useSelector((state) => state.magazine);
   const [currentMagazine, setCurrentMagazine] = React.useState(magazines[0]);
@@ -55,10 +57,16 @@ function CurrentMagazine() {
 
   const handleImageClick = (imageId) => {
     console.log('image id is ', imageId);
+    setOpenDialog(true);
   };
 
   return (
     <div>
+      <MagazineDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        imageList={currentMagazine.images}
+      />
       <Grid container marginTop={3} sx={{ display: 'flex' }} justifyContent="center">
         <Grid item xs={12} md={8}>
           <EnhancedSwipeableViews

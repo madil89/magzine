@@ -13,6 +13,7 @@ import App from './App';
 import store from './store';
 import Image from './components/Image';
 import assetManager from './assets/initMagazine';
+import AdminLayout from './Pages/AdminLayout';
 // import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,6 +24,7 @@ root.render(
           <Route path="/magazines" element={<App />}>
             <Route path=":id" element={<App />} />
           </Route>
+          <Route path="/admin/*" element={<AdminLayout />} />
           <Route path="/test" element={<Image imageList={assetManager.issue18Images} />} />
           <Route path="/" element={<App />} />
         </Routes>
