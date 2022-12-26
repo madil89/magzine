@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import {
   Route, Routes, BrowserRouter,
 } from 'react-router-dom';
+import './config/firebaseConfig';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -13,7 +14,7 @@ import App from './App';
 import store from './store';
 import Image from './components/Image';
 import assetManager from './assets/initMagazine';
-import AdminLayout from './Pages/AdminLayout';
+import AdminLayout from './Pages/AdminPages/AdminLayout';
 // import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

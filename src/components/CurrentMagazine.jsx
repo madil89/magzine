@@ -10,7 +10,6 @@ import { bindKeyboard } from 'react-swipeable-views-utils';
 import TitlebarImageList from './TitleBarImageList';
 import MagazineDialog from './MagazineDialog';
 // import Carousal from './Carousal';
-
 const EnhancedSwipeableViews = bindKeyboard(SwipeableViews);
 
 function CurrentMagazine() {
@@ -41,9 +40,13 @@ function CurrentMagazine() {
   React.useEffect(() => {
     const { id } = params;
     if (id) {
-      const mag = magazines.find((mg) => mg.id === parseInt(id, 10));
+      console.log('magazines are ', magazines);
+      const mag = magazines.find((mg) => mg.id === id);
+      console.log('selected magazine ', mag);
       if (mag) setCurrentMagazine(mag);
       goToTop();
+    } else {
+      setCurrentMagazine(magazines[0]);
     }
   }, [currentMagazine, magazines, params]);
   const getImageIndex = (image) => {
@@ -87,7 +90,7 @@ function CurrentMagazine() {
                 tabIndex="0"
               >
                 <img
-                  src={image.src}
+                  src={image.url}
                   style={{ marginTop: 16, height: '80vh', maxWidth: '100%' }}
                   alt="random"
                 />

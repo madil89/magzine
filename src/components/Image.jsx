@@ -12,7 +12,7 @@ function Image({ imageList }) {
         {imageList.map((image) => (
           <div key={image.id} style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
             <img
-              src={image.src}
+              src={image.url}
               alt={image.alt}
               style={{ marginTop: 16, height: '72vh', maxWidth: '100%' }}
             />
@@ -24,7 +24,7 @@ function Image({ imageList }) {
         {
         imageList.map((image) => (
           <img
-            src={image.src}
+            src={image.url}
             style={{ marginTop: 16, marginRight: 16 }}
             height="100vh"
             alt="random"
@@ -43,10 +43,9 @@ Image.propTypes = {
   imageList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      src: PropTypes.string.isRequired,
-      alt: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      author: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      alt: PropTypes.string,
+      // author: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
 };

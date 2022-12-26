@@ -48,10 +48,10 @@ MagazineDialog.propTypes = {
   imageList: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      src: PropTypes.string.isRequired,
-      alt: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      author: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      // alt: PropTypes.string.isRequired,
+      // title: PropTypes.string.isRequired,
+      // author: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
 };

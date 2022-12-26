@@ -13,8 +13,8 @@ export default function TitlebarImageList({ onImageSelect, images }) {
       {images.map((item) => (
         <ImageListItem key={item.id}>
           <img
-            src={`${item.src}?w=161&fit=crop&auto=format`}
-            srcSet={`${item.src}?w=161&fit=crop&auto=format&dpr=2 2x`}
+            src={`${item.url}`}
+            srcSet={`${item.url}`}
             alt={item.title}
             loading="lazy"
             onClick={() => onImageSelect(item)}
@@ -43,10 +43,10 @@ TitlebarImageList.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      src: PropTypes.string.isRequired,
-      alt: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      author: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      // alt: PropTypes.string.isRequired,
+      // title: PropTypes.string.isRequired,
+      // author: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
 };
