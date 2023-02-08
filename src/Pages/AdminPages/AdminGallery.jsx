@@ -3,18 +3,22 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PreviousMagazine from '../../components/PreviousMagazine';
-// import { loadMagazine } from '../../store/magazineSlice';
 import CreateInfoDialog from '../../components/CreateInfoDialog';
 import firestore from '../../api/firestore';
+import { loadGallery } from '../../store/gallerySlice';
 
-function Magazines() {
+function AdminGallery() {
   const [open, setOpen] = useState(false);
   const loading = useSelector((state) => state.loading);
-  const magazines = useSelector((state) => state.magazine);
+  const gallery = useSelector((state) => state.gallery);
   const navigate = useNavigate();
-  const handleMagazineSelect = (id) => {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(loadGallery());
+  }, []);
+  const handleGallerySelect = (id) => {
     navigate(`/admin/adminMagazines/${id}`);
   };
 
@@ -22,9 +26,9 @@ function Magazines() {
     setOpen(true);
   };
   const onInfo = async (name) => {
-    const id = await firestore.createNewMagazine({ name, images: [] });
+    const id = await firestore.createNewGallery({ name, images: [] });
     setOpen(false);
-    navigate(`/admin/adminMagazines/${id}`);
+    navigate(`/admin/gallery/${id}`);
   };
 
   return loading ? <div>loading...</div> : (
@@ -35,9 +39,9 @@ function Magazines() {
         onInfo={onInfo}
       />
       <AddPhotoAlternateIcon sx={{ width: 300, height: 300 }} onClick={handleCreateNewMagazine} />
-      <PreviousMagazine resource={magazines} onSelected={handleMagazineSelect} />
+      <PreviousMagazine resource={gallery} onSelected={handleGallerySelect} />
     </Box>
   );
 }
 
-export default Magazines;
+export default AdminGallery;

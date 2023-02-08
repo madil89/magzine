@@ -11,6 +11,7 @@ import Image from './Image';
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 export default function MagazineDialog({ open, onClose, imageList }) {
+  const dialogRef = React.useRef();
   const handleClose = () => {
     onClose();
   };
@@ -19,12 +20,13 @@ export default function MagazineDialog({ open, onClose, imageList }) {
     <div>
 
       <Dialog
+        ref={dialogRef}
         fullScreen
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: 'relative', background: 'black' }}>
           <Toolbar>
             <IconButton
               edge="start"

@@ -23,7 +23,7 @@ function EditMagazine() {
   const onFileSelect = (selectedFiles) => {
     setLoading(true);
     const propmiseArray = [...selectedFiles].map((file) => firebaseStorage
-      .uploadFileImage(params.id, file));
+      .uploadMagazineImage(params.id, file));
     Promise.all(propmiseArray).then(async (response) => {
       const updatedMagazine = { ...magazine, images: [...magazine.images, ...response] };
       await firestore.updateMagazine(params.id, updatedMagazine);
@@ -77,7 +77,7 @@ function EditMagazine() {
       />
       <LoadingButton loading={loading} variant="outlined" onClick={() => fileRef.current.click()}>Select Images to Upload</LoadingButton>
       <Grid container spacing={2} style={{ marginTop: 2 }}>
-        {magazine.images.map((image, index) => (
+        {magazine.images.sort((a, b) => a.order - b.order).map((image, index) => (
           <Grid item xs={12} lg={4} md={6} key={image.url}>
             <Box>
               <img
@@ -85,12 +85,23 @@ function EditMagazine() {
                 alt="magazine"
                 width="100%"
               />
-              <TextField
-                name="description"
-                value={image.description}
-                style={{ width: '100%' }}
-                onChange={(e) => handleChangeDescription(e, index)}
-              />
+              <Box sx={{ display: 'flex' }}>
+                <TextField
+                  name="order"
+                  value={image.order}
+                  type="number"
+                  style={{ width: '30%', paddingRight: '10px' }}
+                  onChange={(e) => handleChangeDescription(e, index)}
+                />
+                <TextField
+                  name="description"
+                  value={image.description}
+                  style={{ width: '70%' }}
+                  onChange={(e) => handleChangeDescription(e, index)}
+                />
+
+              </Box>
+
             </Box>
           </Grid>
         ))}

@@ -9,6 +9,7 @@ import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
 import TitlebarImageList from './TitleBarImageList';
 import MagazineDialog from './MagazineDialog';
+import EditorNote from './EditorNote';
 // import Carousal from './Carousal';
 const EnhancedSwipeableViews = bindKeyboard(SwipeableViews);
 
@@ -16,6 +17,7 @@ function CurrentMagazine() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [index, setIndex] = React.useState(0);
   const magazines = useSelector((state) => state.magazine);
+
   const [currentMagazine, setCurrentMagazine] = React.useState(magazines[0]);
   const params = useParams();
   const theme = useTheme();
@@ -35,7 +37,7 @@ function CurrentMagazine() {
     return () => {
       clearInterval(interval);
     };
-  }, [currentMagazine.images]);
+  }, [currentMagazine.images, params.id]);
 
   React.useEffect(() => {
     const { id } = params;
@@ -43,11 +45,14 @@ function CurrentMagazine() {
       console.log('magazines are ', magazines);
       const mag = magazines.find((mg) => mg.id === id);
       console.log('selected magazine ', mag);
-      if (mag) setCurrentMagazine(mag);
+      if (mag) {
+        setCurrentMagazine(mag);
+      }
       goToTop();
     } else {
       setCurrentMagazine(magazines[0]);
     }
+    setIndex(0);
   }, [currentMagazine, magazines, params]);
   const getImageIndex = (image) => {
     const imageIndex = currentMagazine.images.findIndex((item) => item.id === image.id);
@@ -111,6 +116,7 @@ function CurrentMagazine() {
         </Grid>
 
       </Grid>
+      <EditorNote editorNote={currentMagazine.editorNote} />
     </div>
   );
 }

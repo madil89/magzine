@@ -18,9 +18,11 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {
   NavLink, Route, Routes,
 } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import adminRoutes from './adminRoutes';
 import SignInPage from '../SignInPage';
 import AdminAppBar from '../../components/AdminAppBar';
+import { loadMagazine } from '../../store/magazineSlice';
 
 const drawerWidth = 240;
 
@@ -75,12 +77,14 @@ export default function AdminLayout() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [showLogin, setShowLogin] = React.useState(true);
+  const dispatch = useDispatch();
   React.useEffect(() => {
     const auth = getAuth();
 
     const unsubscribed = onAuthStateChanged(auth, (user) => {
       if (user) {
         setShowLogin(false);
+        dispatch(loadMagazine());
       } else {
         setShowLogin(true);
       }

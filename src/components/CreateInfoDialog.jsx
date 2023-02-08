@@ -7,18 +7,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
-import firestore from '../api/firestore';
 
-export default function AddNewMagazine({ open, setOpen, handleMagazineCreated }) {
+export default function CreateInfoDialog({ open, setOpen, onInfo }) {
   const [name, setName] = React.useState('');
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleCreateNewMagazine = async () => {
-    const id = await firestore.createNewMagazine({ name, images: [] });
-    setOpen(false);
-    handleMagazineCreated(id);
+    onInfo(name);
   };
 
   return (
@@ -48,8 +45,8 @@ export default function AddNewMagazine({ open, setOpen, handleMagazineCreated })
     </div>
   );
 }
-AddNewMagazine.propTypes = {
+CreateInfoDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
-  handleMagazineCreated: PropTypes.func.isRequired,
+  onInfo: PropTypes.func.isRequired,
 };

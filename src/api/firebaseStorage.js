@@ -10,10 +10,18 @@ import {
 import { getAuth } from 'firebase/auth';
 import uuid from 'react-uuid';
 
-const uploadFileImage = (magazineId, file) => {
-  const fileName = `${Date.now()}_${file.name}`;
-  const storage = getStorage();
+const createFileId = (fileName) => `${Date.now()}_${fileName}`;
+
+const getMagazineImageId = (magazineId, file) => {
+  const fileName = createFileId(file.name);
   const imageId = `magazines/${magazineId}/images/${fileName}`;
+  return imageId;
+};
+
+const uploadImage = (imageId, file) => {
+  // const fileName = `${Date.now()}_${file.name}`;
+  const storage = getStorage();
+  // const imageId = `magazines/${magazineId}/images/${fileName}`;
   const storageRef = ref(storage, imageId);
   const uploadTask = uploadBytesResumable(storageRef, file);
   uploadTask.on('state_changed', (snapshot) => {
@@ -38,7 +46,10 @@ const uploadFileImage = (magazineId, file) => {
       description: '',
     }));
 };
-
+const uploadMagazineImage = (magazineId, file) => {
+  const imageId = getMagazineImageId(magazineId, file);
+  return uploadImage(imageId, file);
+};
 /**
  * Convert BASE64 to BLOB
  * @param base64Image Pass Base64 image data to convert into the BLOB
@@ -105,7 +116,7 @@ const deleteImage = (deletedRecords) => {
   );
 };
 export default {
-  uploadFileImage,
+  uploadMagazineImage,
   uploadByteArrayImage,
   deleteImage,
 };

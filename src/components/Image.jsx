@@ -7,7 +7,7 @@ const EnhancedSwipeableViews = bindKeyboard(autoPlay((SwipeableViews)));
 
 function Image({ imageList }) {
   return (
-    <div>
+    <div style={{ background: 'black' }}>
       <EnhancedSwipeableViews enableMouseEvents interval={3000}>
         {imageList.map((image) => (
           <div key={image.id} style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
