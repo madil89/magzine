@@ -17,6 +17,11 @@ const getMagazineImageId = (magazineId, file) => {
   const imageId = `magazines/${magazineId}/images/${fileName}`;
   return imageId;
 };
+const getUserImageId = (userId, file) => {
+  const fileName = createFileId(file.name);
+  const imageId = `users/${userId}/images/${fileName}`;
+  return imageId;
+};
 
 const uploadImage = (imageId, file) => {
   // const fileName = `${Date.now()}_${file.name}`;
@@ -42,12 +47,17 @@ const uploadImage = (imageId, file) => {
     .then(() => getDownloadURL(uploadTask.snapshot.ref))
     .then((url) => ({
       url,
-      id: imageId,
+      imageId,
       description: '',
     }));
 };
 const uploadMagazineImage = (magazineId, file) => {
   const imageId = getMagazineImageId(magazineId, file);
+  return uploadImage(imageId, file);
+};
+
+const uploadUserImages = (userId, file) => {
+  const imageId = getUserImageId(userId, file);
   return uploadImage(imageId, file);
 };
 /**
@@ -117,6 +127,7 @@ const deleteImage = (deletedRecords) => {
 };
 export default {
   uploadMagazineImage,
+  uploadUserImages,
   uploadByteArrayImage,
   deleteImage,
 };
