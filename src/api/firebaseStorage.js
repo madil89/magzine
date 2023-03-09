@@ -107,27 +107,15 @@ const uploadByteArrayImage = (imageCode) => {
     }));
 };
 
-const getImageIdsFromRecord = (deletedRecords) => {
-  const imagesToDelete = deletedRecords
-    .filter((_record) => _record.imageId)
-    .map((_record) => _record.imageId);
-  console.log('images to delete', imagesToDelete);
-  return imagesToDelete;
-};
-const deleteImage = (deletedRecords) => {
-  const imageIds = getImageIdsFromRecord(deletedRecords);
+const deleteImageFromStorage = (imageId) => {
   const storage = getStorage();
   // Create a reference to the file to delete
-  Promise.all(
-    imageIds.map((imageId) => {
-      const imageRef = ref(storage, imageId);
-      return deleteObject(imageRef);
-    }),
-  );
+  const imageRef = ref(storage, imageId);
+  return deleteObject(imageRef);
 };
 export default {
   uploadMagazineImage,
   uploadUserImages,
   uploadByteArrayImage,
-  deleteImage,
+  deleteImageFromStorage,
 };

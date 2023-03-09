@@ -13,10 +13,15 @@ import { useUserImage } from '../../hooks/useUserImage';
 function MyImages() {
   const fileRef = React.useRef();
   const [loading, setLoading] = useState(false);
-  const [userImages, setUserImages] = useUserImage();
+  const [userImages] = useUserImage();
 
   const addUserIdToImages = (images) => images.map((image) => (
-    { userId: DataSource.getUserId(), ...image }));
+    { ...image, userId: DataSource.getUserId() }));
+
+  const addImageMetadata = (images) => images.map((image) => (
+    {
+      ...image, tags: ['user_image'], header: '', description: '',
+    }));
 
   const onFileSelect = (selectedFiles) => {
     setLoading(true);
@@ -25,10 +30,11 @@ function MyImages() {
 
     Promise.all(uploadedImages)
       .then((images) => addUserIdToImages(images))
-      .then((imagesWithUserId) => DataSource.addUserImages(imagesWithUserId))
-      .then((updatedImages) => {
+      .then((images) => addImageMetadata(images))
+      .then((imagesWithMetadata) => DataSource.addUserImages(imagesWithMetadata))
+      .then(() => {
         setLoading(false);
-        setUserImages((prevImages) => ([...prevImages, ...updatedImages]));
+        // setUserImages((prevImages) => ([...prevImages, ...updatedImages]));
       });
   };
 

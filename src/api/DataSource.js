@@ -2,8 +2,9 @@ import { getAuth } from 'firebase/auth';
 import {
   collection,
   doc, getFirestore,
-  query, setDoc, updateDoc, where, onSnapshot,
+  query, setDoc, updateDoc, where, onSnapshot, deleteDoc,
 } from 'firebase/firestore';
+import firebaseStorage from './firebaseStorage';
 
 const getUserId = () => getAuth().currentUser.uid;
 const db = getFirestore();
@@ -20,26 +21,28 @@ const subscribeUserImages = (userId, onResult) => {
   });
 };
 
-const updateImageDescription = (id, description) => {
+const updateImageMetadata = (id, updatedMetadata) => {
   const ref = doc(db, 'userImages', id);
   return updateDoc(ref, {
-    description,
+    ...updatedMetadata,
   });
 };
 const addUserImage = async (image) => {
   const imageRef = doc(collection(db, 'userImages'));
   const imageWithId = { id: imageRef.id, ...image };
   return setDoc(imageRef, imageWithId).then(() => imageWithId);
-  // addDoc(collection(db, 'userImages'), image).then((docRef) => ({ id: docRef.id, ...image }));
 };
 
+const deleteImage = (image) => Promise.all([deleteDoc(doc(db, 'userImages', image.id)), firebaseStorage.deleteImageFromStorage(image.imageId)]);
 const addUserImages = (images) => {
   const imagePromises = images.map((image) => addUserImage(image));
   return Promise.all(imagePromises);
 };
+
 export default {
   getUserId,
   addUserImages,
-  updateImageDescription,
+  updateImageMetadata,
   subscribeUserImages,
+  deleteImage,
 };
