@@ -12,14 +12,19 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 // import AdbIcon from '@mui/icons-material/Adb';
+import { NavLink, useNavigate } from 'react-router-dom';
+// import { useTheme } from '@mui/material';
 import Logo from '../assets/logo512.png';
+import userRoutes from '../Pages/UserPages/UserRoutes';
 
-const pages = ['Magzine', 'Gallery', 'Articles', 'Contact'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+// const pages = ['Magazines', 'Gallery', 'Articles', 'Contact'];
+const settings = ['Admin', 'Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
+  // const theme = useTheme();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -32,8 +37,11 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
+    if (setting === 'Admin') {
+      navigate('/admin/dashboard');
+    }
   };
 
   return (
@@ -89,9 +97,9 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" color="secondary">{page}</Typography>
+              {userRoutes.filter(((r) => r.show)).map((page) => (
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" color="secondary">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -116,13 +124,16 @@ function ResponsiveAppBar() {
             Nuqtay
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {userRoutes.filter(((r) => r.show)).map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                <NavLink to={page.path} style={{ textDecoration: 'none', color: 'white' }}>
+                  {page.name}
+                </NavLink>
+
               </Button>
             ))}
           </Box>
@@ -150,7 +161,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

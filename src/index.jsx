@@ -3,14 +3,19 @@ import ReactDOM from 'react-dom/client';
 import {
   Route, Routes, BrowserRouter,
 } from 'react-router-dom';
+import './config/firebaseConfig';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import './index.css';
 import { Provider } from 'react-redux';
-import App from './App';
+// import App from './UserMagazine';
 import store from './store';
+import Image from './components/Image';
+import assetManager from './assets/initMagazine';
+import AdminLayout from './Pages/AdminPages/AdminLayout';
+import UserLayout from './Pages/UserPages/UserLayout';
 // import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,10 +23,13 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/magazines" element={<App />}>
-            <Route path=":id" element={<App />} />
+
+          <Route path="/admin/*" element={<AdminLayout />} />
+          <Route path="/*" element={<UserLayout />}>
+            <Route path=":id" element={<UserLayout />} />
           </Route>
-          <Route path="*" element={<App />} />
+          <Route path="/test" element={<Image imageList={assetManager.issue18Images} />} />
+          {/* <Route path="/" element={<App />} /> */}
         </Routes>
       </BrowserRouter>
     </Provider>

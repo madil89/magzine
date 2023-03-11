@@ -1,34 +1,47 @@
 /* eslint-disable max-len */
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import assetManager from '../assets/initMagazine';
+// import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-function PreviousMagazine() {
-  const navigate = useNavigate();
+function PreviousMagazine({ onSelected, resource }) {
+  // const magazines = useSelector((state) => state.magazine);
+
   return (
     <div style={{ width: '100%', overflowX: 'auto' }}>
-      <Typography variant="h4" sx={{ marginTop: 10 }}>
-        Previous Magazines
-      </Typography>
+
       <Box marginTop={1} marginBottom={10} sx={{ display: 'flex' }}>
         {
-        assetManager.images.map((image) => (
+        resource.map((magazine) => (
+
+          magazine.images.length > 0 ? (
           // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
-          <img
-            src={image.src}
-            style={{ marginTop: 16, marginRight: 16 }}
-            height={250}
-            alt="random"
-            key={image.id}
-            onClick={() => navigate(`/magazine/${image.id}`)}
-          />
+            <img
+              key={magazine.id}
+              src={magazine.images[0].url}
+              style={{ marginTop: 16, marginRight: 16 }}
+              height={250}
+              alt="random"
+              onClick={() => onSelected(`${magazine.id}`)}
+            />
+          )
+            : <AddAPhotoIcon sx={{ width: 100, height: 100 }} />
         ))
       }
       </Box>
-
     </div>
   );
 }
 
+PreviousMagazine.propTypes = {
+  onSelected: PropTypes.func.isRequired,
+  resource: PropTypes.arrayOf(
+    PropTypes.shape({
+      images: PropTypes.arrayOf({
+        url: PropTypes.string.isRequired,
+      }),
+    }),
+  ).isRequired,
+};
 export default PreviousMagazine;
