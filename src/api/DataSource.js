@@ -2,7 +2,7 @@ import { getAuth } from 'firebase/auth';
 import {
   collection,
   doc, getFirestore,
-  query, setDoc, updateDoc, where, onSnapshot, deleteDoc,
+  query, setDoc, updateDoc, where, onSnapshot, deleteDoc, getDocs, orderBy,
 } from 'firebase/firestore';
 import firebaseStorage from './firebaseStorage';
 
@@ -21,15 +21,62 @@ const subscribeUserImages = (userId, onResult) => {
   });
 };
 
-const updateImageMetadata = (id, updatedMetadata) => {
-  const ref = doc(db, 'userImages', id);
+const subscribeMagazineImages = (magazineId, onResult) => {
+  const q = query(
+    collection(db, 'userImages'),
+    where('magazine_id', 'array-contains', magazineId),
+    // orderBy('created_at'),
+  );
+
+  return onSnapshot(q, (querySnapshot) => {
+    const snapshotResult = [];
+    querySnapshot.forEach((item) => {
+      snapshotResult.push({ id: item.id, ...item.data() });
+    });
+    onResult(snapshotResult);
+  });
+};
+
+const subscribeImages = (onResult) => {
+  const q = query(collection(db, 'userImages'));
+
+  return onSnapshot(q, (querySnapshot) => {
+    const snapshotResult = [];
+    querySnapshot.forEach((item) => {
+      snapshotResult.push({ id: item.id, ...item.data() });
+    });
+    onResult(snapshotResult);
+  });
+};
+
+const getMagazineImages = async (magazineId) => {
+  const q = query(
+    collection(db, 'userImages'),
+    where('magazine_id', '==', magazineId),
+    orderBy('created_at', 'desc'),
+  );
+  const querySnapshot = await getDocs(q);
+  const images = [];
+  querySnapshot.forEach((_doc) => {
+    images.push(_doc.data());
+  });
+  return images;
+};
+
+const getUserImagePath = () => 'userImages';
+
+const updateImage = ({ path, updatedImage }) => {
+  const ref = doc(db, path, updatedImage.id);
   return updateDoc(ref, {
-    ...updatedMetadata,
+    ...updatedImage,
+    updated_at: Date.now(),
   });
 };
 const addUserImage = async (image) => {
   const imageRef = doc(collection(db, 'userImages'));
-  const imageWithId = { id: imageRef.id, ...image };
+  const imageWithId = {
+    id: imageRef.id, created_at: Date.now(), updated_at: Date.now(), ...image,
+  };
   return setDoc(imageRef, imageWithId).then(() => imageWithId);
 };
 
@@ -42,7 +89,11 @@ const addUserImages = (images) => {
 export default {
   getUserId,
   addUserImages,
-  updateImageMetadata,
+  updateImage,
   subscribeUserImages,
+  subscribeImages,
   deleteImage,
+  getUserImagePath,
+  getMagazineImages,
+  subscribeMagazineImages,
 };

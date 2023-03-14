@@ -6,6 +6,7 @@ import {
   getDoc,
   doc,
   setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 
 const MAGAZINES = 'magazines';
@@ -41,12 +42,13 @@ const getAllGalleries = async () => {
 
 const getMagazineById = async (id) => {
   const db = getFirestore();
-  return getDoc(doc(db, `${MAGAZINES}/${id}`)).then((snapShot) => snapShot.data());
+  return getDoc(doc(db, `${MAGAZINES}/${id}`)).then((snapShot) => ({ ...snapShot.data(), id: snapShot.id }));
 };
 
 const updateMagazine = async (id, magazine) => {
   const db = getFirestore();
-  return setDoc(doc(db, MAGAZINES`/${id}`), magazine);
+  const ref = doc(db, `${MAGAZINES}/${id}`);
+  return updateDoc(ref, { ...magazine });
 };
 const updateGallery = async (id, gallery) => {
   const db = getFirestore();

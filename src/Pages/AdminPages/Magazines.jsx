@@ -8,11 +8,12 @@ import PreviousMagazine from '../../components/PreviousMagazine';
 // import { loadMagazine } from '../../store/magazineSlice';
 import CreateInfoDialog from '../../components/CreateInfoDialog';
 import firestore from '../../api/firestore';
+import { useMagazines } from '../../hooks/useMagazines';
 
 function Magazines() {
   const [open, setOpen] = useState(false);
   const loading = useSelector((state) => state.loading);
-  const magazines = useSelector((state) => state.magazine);
+  const magazines = useMagazines();
   const navigate = useNavigate();
   const handleMagazineSelect = (id) => {
     navigate(`/admin/adminMagazines/${id}`);
@@ -22,7 +23,7 @@ function Magazines() {
     setOpen(true);
   };
   const onInfo = async (name) => {
-    const id = await firestore.createNewMagazine({ name, images: [] });
+    const id = await firestore.createNewMagazine({ name, images: {} });
     setOpen(false);
     navigate(`/admin/adminMagazines/${id}`);
   };

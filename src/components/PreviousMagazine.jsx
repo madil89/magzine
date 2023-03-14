@@ -15,18 +15,24 @@ function PreviousMagazine({ onSelected, resource }) {
         {
         resource.map((magazine) => (
 
-          magazine.images.length > 0 ? (
+          magazine.cover ? (
           // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
             <img
               key={magazine.id}
-              src={magazine.images[0].url}
+              src={magazine.cover.url}
               style={{ marginTop: 16, marginRight: 16 }}
               height={250}
               alt="random"
               onClick={() => onSelected(`${magazine.id}`)}
             />
           )
-            : <AddAPhotoIcon sx={{ width: 100, height: 100 }} />
+            : (
+              <AddAPhotoIcon
+                key={magazine.id}
+                sx={{ width: 100, height: 100 }}
+                onClick={() => onSelected(`${magazine.id}`)}
+              />
+            )
         ))
       }
       </Box>
@@ -38,7 +44,7 @@ PreviousMagazine.propTypes = {
   onSelected: PropTypes.func.isRequired,
   resource: PropTypes.arrayOf(
     PropTypes.shape({
-      images: PropTypes.arrayOf({
+      cover: PropTypes.shape({
         url: PropTypes.string.isRequired,
       }),
     }),

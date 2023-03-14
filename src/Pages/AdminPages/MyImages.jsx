@@ -20,7 +20,7 @@ function MyImages() {
 
   const addImageMetadata = (images) => images.map((image) => (
     {
-      ...image, tags: ['user_image'], header: '', description: '',
+      ...image, tags: ['user_image'], header: '', description: '', magazine_id: [],
     }));
 
   const onFileSelect = (selectedFiles) => {
@@ -43,7 +43,16 @@ function MyImages() {
       <Grid container spacing={2} style={{ marginTop: 2 }}>
         {userImages.map((image) => (
           <Grid item key={image.id}>
-            <ImageCard image={image} />
+            <ImageCard
+              image={image}
+              imagePath={DataSource.getUserImagePath()}
+              updateImage={
+                ({ updatedImage }) => DataSource.updateImage(
+                  { path: DataSource.getUserImagePath(), updatedImage },
+                )
+              }
+              deleteImage={(_image) => DataSource.deleteImage(_image)}
+            />
           </Grid>
         ))}
 
