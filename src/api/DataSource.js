@@ -6,9 +6,21 @@ import {
 } from 'firebase/firestore';
 import firebaseStorage from './firebaseStorage';
 
+const MAGAZINES = 'magazines';
+
 const getUserId = () => getAuth().currentUser.uid;
 const db = getFirestore();
 
+const subscribeAllMagazines = (onResult) => {
+  const q = query(collection(db, MAGAZINES));
+  return onSnapshot(q, (querySnapshot) => {
+    const snapshotResult = [];
+    querySnapshot.forEach((item) => {
+      snapshotResult.push({ id: item.id, ...item.data() });
+    });
+    onResult(snapshotResult);
+  });
+};
 const subscribeUserImages = (userId, onResult) => {
   const q = query(collection(db, 'userImages'), where('userId', '==', userId));
 
@@ -90,6 +102,7 @@ export default {
   getUserId,
   addUserImages,
   updateImage,
+  subscribeAllMagazines,
   subscribeUserImages,
   subscribeImages,
   deleteImage,

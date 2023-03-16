@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 // import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -16,15 +16,24 @@ function PreviousMagazine({ onSelected, resource }) {
         resource.map((magazine) => (
 
           magazine.cover ? (
-          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
-            <img
+
+            <div
+              style={{ cursor: 'pointer' }}
               key={magazine.id}
-              src={magazine.cover.url}
-              style={{ marginTop: 16, marginRight: 16 }}
-              height={250}
-              alt="random"
               onClick={() => onSelected(`${magazine.id}`)}
-            />
+              role="button"
+              tabIndex={0}
+              onKeyDown={() => console.log('onkeydown')}
+            >
+              <img
+                src={magazine.cover.url}
+                style={{ marginTop: 16, marginRight: 16 }}
+                height={250}
+                alt="random"
+              />
+              <Typography>{magazine.name}</Typography>
+            </div>
+
           )
             : (
               <AddAPhotoIcon

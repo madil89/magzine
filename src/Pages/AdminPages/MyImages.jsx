@@ -38,6 +38,13 @@ function MyImages() {
       });
   };
 
+  const handleImageDelete = (_image) => {
+    if (_image.magazine_id && _image.magazine_id.length > 0) {
+      alert('image can not be deleted! because it is used in magazine');
+      return;
+    }
+    DataSource.deleteImage(_image);
+  };
   return (
     <div>
       <Grid container spacing={2} style={{ marginTop: 2 }}>
@@ -51,7 +58,7 @@ function MyImages() {
                   { path: DataSource.getUserImagePath(), updatedImage },
                 )
               }
-              deleteImage={(_image) => DataSource.deleteImage(_image)}
+              deleteImage={(_image) => handleImageDelete(_image)}
             />
           </Grid>
         ))}

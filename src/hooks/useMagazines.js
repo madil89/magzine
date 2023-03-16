@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import firestore from '../api/firestore';
+import DataSource from '../api/DataSource';
 
 export const useMagazines = () => {
   const [magazines, setMagazines] = useState([]);
   useEffect(() => {
-    firestore.getAllMagazines().then((results) => {
-      setMagazines(results);
+    const unsbuscribe = DataSource.subscribeAllMagazines((results) => {
+      setMagazines(results || []);
     });
     return () => {
-
+      unsbuscribe();
     };
   }, []);
   return magazines;

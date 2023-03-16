@@ -30,12 +30,18 @@ function EditMagazine() {
       ...magazine,
       cover: value ? { url: image.url, id: image.id } : null,
     };
-
     updateMagazin(updated);
-
     firestore.updateMagazine(params.id, updated);
   };
 
+  const removeImageFromMagazine = (_image) => {
+    const updated = {
+      ..._image,
+      magazine_id: _image.magazine_id.filter((id) => id !== params.id),
+    };
+    console.log('updated image is ', updated);
+    DataSource.updateImage({ path: DataSource.getUserImagePath(), updatedImage: updated });
+  };
   const handleSaveInfo = async () => {
     setLoading(true);
     await firestore.updateMagazine(params.id, magazine);
@@ -66,7 +72,7 @@ function EditMagazine() {
               updateImage={
                 ({ updatedImage }) => console.log(updatedImage)
               }
-              deleteImage={(_image) => console.log('delete image', _image)}
+              deleteImage={(_image) => removeImageFromMagazine(_image)}
               makeCoverImage={(e) => handleChangeCover(e.target.name, e.target.checked, image)}
               isCover={magazine?.cover?.id === image.id}
 
