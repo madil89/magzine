@@ -46,7 +46,11 @@ function SelectableImage({ magazineId }) {
               <CardActions>
                 <Checkbox
                   checked={checkIfImageExists(image)}
-                  onChange={(e) => updateImage({ image, magazineId, checked: e.target.checked })}
+                  onChange={(e) => updateImage({
+                    image,
+                    magazineId,
+                    checked: e.target.checked,
+                  })}
                 />
 
               </CardActions>

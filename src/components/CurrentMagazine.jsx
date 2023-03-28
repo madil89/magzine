@@ -1,61 +1,39 @@
-/* eslint-disable no-console */
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Grid } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import SwipeableViews from 'react-swipeable-views';
 import { bindKeyboard } from 'react-swipeable-views-utils';
+import PropTypes from 'prop-types';
 import TitlebarImageList from './TitleBarImageList';
 import MagazineDialog from './MagazineDialog';
 import EditorNote from './EditorNote';
+import { useMagazineImage } from '../hooks/useMagazineImages';
 // import Carousal from './Carousal';
 const EnhancedSwipeableViews = bindKeyboard(SwipeableViews);
 
-function CurrentMagazine() {
+function CurrentMagazine({ currentMagazine }) {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [index, setIndex] = React.useState(0);
-  const magazines = useSelector((state) => state.magazine);
 
-  const [currentMagazine, setCurrentMagazine] = React.useState(magazines[0]);
-  const params = useParams();
+  const { magazineImage, loadMagazine } = useMagazineImage(currentMagazine.id);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('md'));
 
-  const goToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
-
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % currentMagazine.images.length);
+      setIndex((prevIndex) => (prevIndex + 1) % magazineImage.length);
     }, 10000);
     return () => {
       clearInterval(interval);
     };
-  }, [currentMagazine.images, params.id]);
+  }, [magazineImage]);
 
   React.useEffect(() => {
-    const { id } = params;
-    if (id) {
-      console.log('magazines are ', magazines);
-      const mag = magazines.find((mg) => mg.id === id);
-      console.log('selected magazine ', mag);
-      if (mag) {
-        setCurrentMagazine(mag);
-      }
-      goToTop();
-    } else {
-      setCurrentMagazine(magazines[0]);
-    }
-    setIndex(0);
-  }, [currentMagazine, magazines, params]);
+    loadMagazine(currentMagazine.id);
+  }, [currentMagazine]);
   const getImageIndex = (image) => {
-    const imageIndex = currentMagazine.images.findIndex((item) => item.id === image.id);
+    const imageIndex = magazineImage.findIndex((item) => item.id === image.id);
     return imageIndex;
   };
 
@@ -63,8 +41,7 @@ function CurrentMagazine() {
     setIndex(currentIndex);
   };
 
-  const handleImageClick = (imageId) => {
-    console.log('image id is ', imageId);
+  const handleImageClick = () => {
     setOpenDialog(true);
   };
 
@@ -73,7 +50,7 @@ function CurrentMagazine() {
       <MagazineDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
-        imageList={currentMagazine.images}
+        imageList={magazineImage}
       />
       <Grid container marginTop={3} sx={{ display: 'flex' }} justifyContent="center">
         <Grid item xs={12} md={8}>
@@ -83,7 +60,7 @@ function CurrentMagazine() {
             interval={3000}
             onChangeIndex={handleSlideChange}
           >
-            {currentMagazine.images.map((image) => (
+            {magazineImage.map((image) => (
               <div
                 style={{ display: 'flex', justifyContent: 'center', width: '100%' }}
                 key={image.id}
@@ -108,7 +85,7 @@ function CurrentMagazine() {
           {matches
         && (
         <TitlebarImageList
-          images={currentMagazine.images}
+          images={magazineImage}
           onImageSelect={(image) => setIndex(getImageIndex(image))}
         />
         )}
@@ -120,5 +97,12 @@ function CurrentMagazine() {
     </div>
   );
 }
+
+CurrentMagazine.propTypes = {
+  currentMagazine: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    editorNote: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default CurrentMagazine;

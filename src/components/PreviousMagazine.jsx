@@ -23,7 +23,7 @@ function PreviousMagazine({ onSelected, resource }) {
               onClick={() => onSelected(`${magazine.id}`)}
               role="button"
               tabIndex={0}
-              onKeyDown={() => console.log('onkeydown')}
+              onKeyDown={() => {}}
             >
               <img
                 src={magazine.cover.url}

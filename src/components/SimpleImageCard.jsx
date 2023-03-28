@@ -44,6 +44,7 @@ function SimpleImageCard({
         <div style={{ marginTop: '10px' }}>
           {image.tags && image.tags.map((tag) => <Chip key={tag} label={tag} />)}
         </div>
+
         {makeCoverImage && (
         <div>
           <FormControlLabel

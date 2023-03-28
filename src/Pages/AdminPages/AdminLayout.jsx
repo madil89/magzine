@@ -18,6 +18,8 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {
   NavLink, Route, Routes,
 } from 'react-router-dom';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch } from 'react-redux';
 import adminRoutes from './adminRoutes';
 import SignInPage from '../SignInPage';
@@ -100,18 +102,19 @@ export default function AdminLayout() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AdminAppBar />
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {adminRoutes.map((route) => !route.hidden && (
+    <DndProvider backend={HTML5Backend}>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <AdminAppBar />
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {adminRoutes.map((route) => !route.hidden && (
             <NavLink
               key={route.name}
               to={`/admin${route.path}`}
@@ -145,21 +148,23 @@ export default function AdminLayout() {
               </ListItem>
             </NavLink>
 
-          ))}
-        </List>
-        <Divider />
-      </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
-        {showLogin ? <SignInPage />
-          : (
-            <Routes>
-              {adminRoutes.map((route) => (
-                <Route key={route.path} exact path={route.path} element={<route.component />} />
-              ))}
-            </Routes>
-          )}
+            ))}
+          </List>
+          <Divider />
+        </Drawer>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+          <DrawerHeader />
+          {showLogin ? <SignInPage />
+            : (
+              <Routes>
+                {adminRoutes.map((route) => (
+                  <Route key={route.path} exact path={route.path} element={<route.component />} />
+                ))}
+              </Routes>
+            )}
+        </Box>
       </Box>
-    </Box>
+    </DndProvider>
+
   );
 }

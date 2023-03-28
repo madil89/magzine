@@ -2,21 +2,22 @@ import {
   Grid, Typography, TextareaAutosize,
   Dialog, DialogTitle, DialogContent, DialogActions, Button,
 } from '@mui/material';
-
 import { LoadingButton } from '@mui/lab';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import firestore from '../../api/firestore';
-import ImageCard from '../../components/ImageCard';
+// import ImageCard from '../../components/ImageCard';
 import DataSource from '../../api/DataSource';
 import SelectableImage from '../../components/SelectableImage';
 import { useMagazineImage } from '../../hooks/useMagazineImages';
+import { ImageCardDnD } from '../../components/ImageCardDnD';
 
 function EditMagazine() {
   const params = useParams();
   const [loading, setLoading] = useState(false);
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
   const { magazine, magazineImage, updateMagazin } = useMagazineImage(params.id);
+  const [sortedMagazineImage, setSortedMagazineImage] = useState([...magazineImage]);
   const handleChangeEditorNote = (e) => {
     const updated = {
       ...magazine,
@@ -24,6 +25,10 @@ function EditMagazine() {
     };
     updateMagazin(updated);
   };
+
+  React.useEffect(() => {
+    setSortedMagazineImage([...magazineImage]);
+  }, [magazineImage]);
 
   const handleChangeCover = (name, value, image) => {
     const updated = {
@@ -39,7 +44,6 @@ function EditMagazine() {
       ..._image,
       magazine_id: _image.magazine_id.filter((id) => id !== params.id),
     };
-    console.log('updated image is ', updated);
     DataSource.updateImage({ path: DataSource.getUserImagePath(), updatedImage: updated });
   };
   const handleSaveInfo = async () => {
@@ -49,6 +53,18 @@ function EditMagazine() {
   };
 
   const handleDialogClose = () => setFileDialogOpen(false);
+  const moveCard = (dragIndex, hoverIndex) => {
+    const tempArray = [...sortedMagazineImage];
+    const temp = tempArray[dragIndex];
+    tempArray[dragIndex] = tempArray[hoverIndex];
+    tempArray[hoverIndex] = temp;
+    setSortedMagazineImage(tempArray);
+    // console.log('drage index ', sortedMagazineImage);
+  };
+
+  const updateCard = () => {
+    // console.log('updating images');
+  };
   return !magazine ? <div>Loading...</div> : (
     <div>
       <Typography variant="h2">{magazine.name}</Typography>
@@ -62,22 +78,25 @@ function EditMagazine() {
         }}
         onChange={(e) => handleChangeEditorNote(e)}
       />
+      <Grid container spacing={2} alignItems="center" style={{ marginTop: 2 }}>
+        {sortedMagazineImage.map((image, index) => (
 
-      <Grid container spacing={2} style={{ marginTop: 2 }}>
-        {magazineImage.map((image) => (
-          <Grid item xs={12} lg={4} md={6} key={image.url}>
-            <ImageCard
+          <Grid item xs={12} lg={4} md={4} key={image.id}>
+            <ImageCardDnD
+              index={index}
               image={image}
+              moveCard={moveCard}
+              updateCard={updateCard}
               imagePath={DataSource.getUserImagePath()}
               updateImage={
-                ({ updatedImage }) => console.log(updatedImage)
+                () => {}
               }
               deleteImage={(_image) => removeImageFromMagazine(_image)}
               makeCoverImage={(e) => handleChangeCover(e.target.name, e.target.checked, image)}
               isCover={magazine?.cover?.id === image.id}
-
             />
           </Grid>
+
         ))}
       </Grid>
       <LoadingButton

@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import { LoadingButton } from '@mui/lab';
 import {
   Card, CardActions, Grid,
@@ -20,7 +21,7 @@ function MyImages() {
 
   const addImageMetadata = (images) => images.map((image) => (
     {
-      ...image, tags: ['user_image'], header: '', description: '', magazine_id: [],
+      ...image, tags: ['user_image'], header: '', description: '', magazine_id: [], sort_order: {},
     }));
 
   const onFileSelect = (selectedFiles) => {
