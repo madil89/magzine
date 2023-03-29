@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from 'react';
 import DataSource from '../api/DataSource';
 import firestore from '../api/firestore';
@@ -8,7 +9,9 @@ export const useMagazineImage = (magazineId) => {
   const [_magazineId, setMagazineId] = useState(magazineId);
   useEffect(() => {
     const unsbuscribe = DataSource.subscribeMagazineImages(_magazineId, (results) => {
-      setMagazineImages(results || []);
+      setMagazineImages(results?.sort(
+        (a, b) => a.sort_order[_magazineId] - b.sort_order[_magazineId],
+      ) || []);
     });
     return () => {
       unsbuscribe();

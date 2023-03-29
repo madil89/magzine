@@ -6,7 +6,6 @@ import { LoadingButton } from '@mui/lab';
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import firestore from '../../api/firestore';
-// import ImageCard from '../../components/ImageCard';
 import DataSource from '../../api/DataSource';
 import SelectableImage from '../../components/SelectableImage';
 import { useMagazineImage } from '../../hooks/useMagazineImages';
@@ -53,17 +52,22 @@ function EditMagazine() {
   };
 
   const handleDialogClose = () => setFileDialogOpen(false);
+
   const moveCard = (dragIndex, hoverIndex) => {
     const tempArray = [...sortedMagazineImage];
     const temp = tempArray[dragIndex];
     tempArray[dragIndex] = tempArray[hoverIndex];
     tempArray[hoverIndex] = temp;
     setSortedMagazineImage(tempArray);
-    // console.log('drage index ', sortedMagazineImage);
   };
 
-  const updateCard = () => {
-    // console.log('updating images');
+  const updateCard = async () => {
+    sortedMagazineImage.forEach(async (img, index) => {
+      await DataSource.updateImage({
+        path: DataSource.getUserImagePath(),
+        updatedImage: { ...img, sort_order: { ...img.sort_order, [magazine.id]: index } },
+      });
+    });
   };
   return !magazine ? <div>Loading...</div> : (
     <div>

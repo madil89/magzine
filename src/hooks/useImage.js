@@ -10,7 +10,7 @@ export const useImage = () => {
       updatedImage = {
         ...updatedImage,
         magazine_id: [...updatedImage.magazine_id, magazineId],
-        sort_order: { ...updatedImage.sort_order, [magazineId]: 1 },
+        sort_order: { ...updatedImage.sort_order, [magazineId]: images.length + 1 },
       };
     } else {
       updatedImage = {

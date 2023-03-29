@@ -17,7 +17,7 @@ const style = {
 };
 export function ImageCardDnD(props) {
   const {
-    index, moveCard, image,
+    index, moveCard, image, updateCard,
   } = props;
 
   const { id } = image;
@@ -28,6 +28,9 @@ export function ImageCardDnD(props) {
       return {
         handlerId: monitor.getHandlerId(),
       };
+    },
+    drop() {
+      updateCard();
     },
     hover(item, monitor) {
       if (!ref.current) {
