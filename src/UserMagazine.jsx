@@ -8,6 +8,7 @@ import { Typography } from '@mui/material';
 import PreviousMagazine from './components/PreviousMagazine';
 import CurrentMagazine from './components/CurrentMagazine';
 import { useMagazines } from './hooks/useMagazines';
+import Gallery from './Pages/UserPages/Gallery';
 
 function UserMagazine() {
   const magazineList = useMagazines();
@@ -46,6 +47,7 @@ function UserMagazine() {
           resource={magazineList}
           onSelected={(magazineId) => navigate(`/magazines/${magazineId}`)}
         />
+        <Gallery />
       </Container>
 
     </div>

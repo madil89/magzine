@@ -13,7 +13,7 @@ import { useMagazines } from '../../hooks/useMagazines';
 function Magazines() {
   const [open, setOpen] = useState(false);
   const loading = useSelector((state) => state.loading);
-  const magazines = useMagazines();
+  const { magazines, deleteMagazine } = useMagazines();
   const navigate = useNavigate();
   const handleMagazineSelect = (id) => {
     navigate(`/admin/adminMagazines/${id}`);
@@ -36,7 +36,12 @@ function Magazines() {
         onInfo={onInfo}
       />
       <AddPhotoAlternateIcon sx={{ width: 300, height: 300 }} onClick={handleCreateNewMagazine} />
-      <PreviousMagazine resource={magazines} onSelected={handleMagazineSelect} />
+      <PreviousMagazine
+        resource={magazines}
+        onSelected={handleMagazineSelect}
+        withDelete
+        handleMagazineDelete={deleteMagazine}
+      />
     </Box>
   );
 }

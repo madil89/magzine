@@ -38,6 +38,14 @@ function EditMagazine() {
     firestore.updateMagazine(params.id, updated);
   };
 
+  const checkIfImageExists = (image) => {
+    if (image.magazine_id) {
+      const index = image.magazine_id.findIndex((id) => id === magazine.id);
+      if (index !== -1) return true;
+      return false;
+    }
+    return false;
+  };
   const removeImageFromMagazine = (_image) => {
     const updated = {
       ..._image,
@@ -69,6 +77,27 @@ function EditMagazine() {
       });
     });
   };
+
+  const addImageToResource = ({ image, checked, resourceId }) => {
+    let updatedImage = { ...image };
+    if (checked) {
+      updatedImage = {
+        ...updatedImage,
+        magazine_id: [...updatedImage.magazine_id, resourceId],
+        sort_order: { ...updatedImage.sort_order, [resourceId]: 1 },
+      };
+    } else {
+      updatedImage = {
+        ...updatedImage,
+        magazine_id: [...updatedImage.magazine_id.filter((id) => id !== resourceId)],
+        sort_order: { ...updatedImage.sort_order, [resourceId]: null },
+      };
+
+      delete updatedImage?.sort_order?.[resourceId];
+    }
+    return updatedImage;
+  };
+
   return !magazine ? <div>Loading...</div> : (
     <div>
       <Typography variant="h2">{magazine.name}</Typography>
@@ -130,7 +159,11 @@ function EditMagazine() {
           Select Image For Magazine
         </DialogTitle>
         <DialogContent>
-          <SelectableImage magazineId={magazine.id} />
+          <SelectableImage
+            resourceId={magazine.id}
+            addImageToResource={addImageToResource}
+            checkIfImageExists={checkIfImageExists}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose} autoFocus>

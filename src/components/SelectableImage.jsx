@@ -5,17 +5,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useImage } from '../hooks/useImage';
 
-function SelectableImage({ magazineId }) {
+function SelectableImage({ resourceId, addImageToResource, checkIfImageExists }) {
   const { images, updateImage } = useImage();
 
-  const checkIfImageExists = (image) => {
-    if (image.magazine_id) {
-      const index = image.magazine_id.findIndex((id) => id === magazineId);
-      if (index !== -1) return true;
-      return false;
-    }
-    return false;
+  const handleUpdateImage = ({ image, checked }) => {
+    const updatedImage = addImageToResource({ image, checked, resourceId });
+    updateImage({ updatedImage });
   };
+
   return (
     <div>
       <Grid container spacing={2} style={{ marginTop: 2 }}>
@@ -46,9 +43,8 @@ function SelectableImage({ magazineId }) {
               <CardActions>
                 <Checkbox
                   checked={checkIfImageExists(image)}
-                  onChange={(e) => updateImage({
+                  onChange={(e) => handleUpdateImage({
                     image,
-                    magazineId,
                     checked: e.target.checked,
                   })}
                 />
@@ -64,6 +60,8 @@ function SelectableImage({ magazineId }) {
 }
 
 SelectableImage.propTypes = {
-  magazineId: PropTypes.string.isRequired,
+  resourceId: PropTypes.string.isRequired,
+  addImageToResource: PropTypes.func.isRequired,
+  checkIfImageExists: PropTypes.func.isRequired,
 };
 export default SelectableImage;

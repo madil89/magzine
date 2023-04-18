@@ -1,0 +1,17 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /userImages/{document} {
+      allow write: if request.auth != null;
+      allow read: if true;
+    }
+    match /magazines/{document} {
+      allow write: if request.auth != null;
+      allow read: if true;
+    }
+    match /galleries/{document} {
+      allow write: if request.auth != null;
+      allow read: if true;
+    }
+  }
+}

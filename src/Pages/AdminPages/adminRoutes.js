@@ -1,6 +1,6 @@
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import Dashboard from './Dashboard';
+import Dashboard from './AdminDashboard';
 import Magazines from './Magazines';
 import EditMagazine from './EditMagazine';
 import AdminGallery from './AdminGallery';
@@ -9,8 +9,8 @@ import MyImages from './MyImages';
 
 const routes = [
   {
-    name: 'Dashbaord',
-    path: '/dashboard',
+    name: 'Users',
+    path: '/users',
     icon: DashboardIcon,
     component: Dashboard,
     hidden: false,

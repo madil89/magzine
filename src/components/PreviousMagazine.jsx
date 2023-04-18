@@ -1,56 +1,48 @@
 /* eslint-disable max-len */
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 // import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import Cover from './Cover';
+import withDeleteButton from './withDelete';
 
-function PreviousMagazine({ onSelected, resource }) {
-  // const magazines = useSelector((state) => state.magazine);
-
+const CoverWithDeleteButton = withDeleteButton(Cover);
+function PreviousMagazine({
+  onSelected, resource, withDelete, handleMagazineDelete,
+}) {
   return (
     <div style={{ width: '100%', overflowX: 'auto' }}>
 
       <Box marginTop={1} marginBottom={10} sx={{ display: 'flex' }}>
         {
         resource.map((magazine) => (
-
-          magazine.cover ? (
-
-            <div
-              style={{ cursor: 'pointer' }}
+          withDelete ? (
+            <CoverWithDeleteButton
               key={magazine.id}
-              onClick={() => onSelected(`${magazine.id}`)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={() => {}}
-            >
-              <img
-                src={magazine.cover.url}
-                style={{ marginTop: 16, marginRight: 16 }}
-                height={250}
-                alt="random"
-              />
-              <Typography>{magazine.name}</Typography>
-            </div>
-
+              onSelected={onSelected}
+              magazine={magazine}
+              onDelete={handleMagazineDelete}
+            />
           )
-            : (
-              <AddAPhotoIcon
-                key={magazine.id}
-                sx={{ width: 100, height: 100 }}
-                onClick={() => onSelected(`${magazine.id}`)}
-              />
-            )
+            : <Cover key={magazine.id} onSelected={onSelected} magazine={magazine} />
         ))
+
       }
       </Box>
     </div>
   );
 }
 
+PreviousMagazine.defaultProps = {
+  withDelete: false,
+  handleMagazineDelete: () => {
+    console.log('delete funtion is not provided');
+  },
+};
 PreviousMagazine.propTypes = {
   onSelected: PropTypes.func.isRequired,
+  handleMagazineDelete: PropTypes.func,
+  withDelete: PropTypes.bool,
   resource: PropTypes.arrayOf(
     PropTypes.shape({
       cover: PropTypes.shape({

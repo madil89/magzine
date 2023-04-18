@@ -4,6 +4,9 @@ import {
   doc, getFirestore,
   query, setDoc, updateDoc, where, onSnapshot, deleteDoc, getDocs, orderBy,
 } from 'firebase/firestore';
+
+import functions from './functions';
+
 import firebaseStorage from './firebaseStorage';
 
 const MAGAZINES = 'magazines';
@@ -37,6 +40,22 @@ const subscribeMagazineImages = (magazineId, onResult) => {
   const q = query(
     collection(db, 'userImages'),
     where('magazine_id', 'array-contains', magazineId),
+    // orderBy('created_at'),
+  );
+
+  return onSnapshot(q, (querySnapshot) => {
+    const snapshotResult = [];
+    querySnapshot.forEach((item) => {
+      snapshotResult.push({ id: item.id, ...item.data() });
+    });
+    onResult(snapshotResult);
+  }, (error) => console.log('error is ', error));
+};
+
+const subscribeGalleryImages = (onResult) => {
+  const q = query(
+    collection(db, 'userImages'),
+    where('gallery', '==', true),
     // orderBy('created_at'),
   );
 
@@ -109,4 +128,6 @@ export default {
   getUserImagePath,
   getMagazineImages,
   subscribeMagazineImages,
+  subscribeGalleryImages,
+  ...functions,
 };
