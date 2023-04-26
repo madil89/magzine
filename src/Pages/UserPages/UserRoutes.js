@@ -1,5 +1,6 @@
 import UserMagazine from '../../UserMagazine';
 import Gallery from './Gallery';
+import PhotoGraphy from './PhotoGraphy';
 
 const routes = [
   {
@@ -29,6 +30,13 @@ const routes = [
     path: '/gallery/:id',
     component: Gallery,
     show: false,
+  },
+  {
+    id: '5',
+    name: 'PhotoGraphy',
+    path: '/photography',
+    component: PhotoGraphy,
+    show: true,
   },
 ];
 export default routes;

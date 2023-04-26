@@ -51,6 +51,7 @@ function CurrentMagazine({ currentMagazine }) {
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         imageList={magazineImage}
+        index={index}
       />
       <Grid container marginTop={3} sx={{ display: 'flex' }} justifyContent="center">
         <Grid item xs={12} md={8}>
@@ -93,7 +94,7 @@ function CurrentMagazine({ currentMagazine }) {
         </Grid>
 
       </Grid>
-      <EditorNote editorNote={currentMagazine.editorNote} />
+      <EditorNote editorNote={currentMagazine.editorNote || ''} />
     </div>
   );
 }

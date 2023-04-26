@@ -4,11 +4,11 @@ import {
 } from '@mui/material';
 
 import React from 'react';
-import { useGalleryImage } from '../../hooks/useGalleryImage';
+import { usePhotoGraphyImage } from '../../hooks/usePhotoGraphyImage';
 import MagazineDialog from '../../components/MagazineDialog';
 
-function Gallery() {
-  const { galleryImages } = useGalleryImage();
+function PhotoGraphy() {
+  const { photoGraphyImages } = usePhotoGraphyImage();
   const [openDialog, setOpenDialog] = React.useState(false);
   const [index, setIndex] = React.useState(0);
   const handleImageClick = (_index) => {
@@ -20,17 +20,17 @@ function Gallery() {
       <MagazineDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
-        imageList={galleryImages}
+        imageList={photoGraphyImages}
         index={index}
       />
-      <Typography>Gallery</Typography>
-      <Box sx={{ width: '100%', overflowY: 'scroll' }}>
+      <Typography>Photo Graphy</Typography>
+      <Box sx={{ width: '100%', height: 1200, overflowY: 'scroll' }}>
         <ImageList
           variant="masonry"
           cols={8}
           gap={8}
         >
-          {galleryImages.map((item, _index) => (
+          {photoGraphyImages.map((item, _index) => (
             <ImageListItem key={item.id} cols={item.cols || 1} rows={item.rows || 1}>
               <img
                 src={item.url}
@@ -53,4 +53,4 @@ function Gallery() {
   );
 }
 
-export default Gallery;
+export default PhotoGraphy;

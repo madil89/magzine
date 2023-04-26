@@ -57,7 +57,21 @@ const subscribeGalleryImages = (onResult) => {
   const q = query(
     collection(db, 'userImages'),
     where('gallery', '==', true),
-    // orderBy('created_at'),
+  );
+
+  return onSnapshot(q, (querySnapshot) => {
+    const snapshotResult = [];
+    querySnapshot.forEach((item) => {
+      snapshotResult.push({ id: item.id, ...item.data() });
+    });
+    onResult(snapshotResult);
+  });
+};
+
+const subscribePhotoGraphyImages = (onResult) => {
+  const q = query(
+    collection(db, 'userImages'),
+    where('photoGraphy', '==', true),
   );
 
   return onSnapshot(q, (querySnapshot) => {
@@ -82,10 +96,6 @@ const subscribeImages = (onResult) => {
 };
 
 const getMagazineImages = async (magazineId) => {
-  // const q = query(
-  //   collection(db, 'userImages'),
-  //   where('magazine_id', '==', magazineId),
-  // );
   const q = query(
     collection(db, 'userImages'),
     where('magazine_id', 'array-contains', magazineId),
@@ -134,6 +144,7 @@ export default {
   getMagazineImages,
   subscribeMagazineImages,
   subscribeGalleryImages,
+  subscribePhotoGraphyImages,
   ...functions,
   ...firestore,
 };

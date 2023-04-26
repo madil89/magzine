@@ -1,8 +1,12 @@
 import { getApp } from 'firebase/app';
-import { getFunctions, connectFunctionsEmulator, httpsCallable } from 'firebase/functions';
+import {
+  getFunctions,
+  // connectFunctionsEmulator,
+  httpsCallable,
+} from 'firebase/functions';
 
 const functions = getFunctions(getApp());
-connectFunctionsEmulator(functions, 'localhost', 5001);
+// connectFunctionsEmulator(functions, 'localhost', 5001);
 const getUsers = httpsCallable(functions, 'getUsers');
 const addCustomClaims = httpsCallable(functions, 'addCustomClaims');
 

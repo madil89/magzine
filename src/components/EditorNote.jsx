@@ -22,7 +22,6 @@ function EditorNote({ editorNote }) {
     </>
   );
 }
-
 EditorNote.propTypes = {
   editorNote: PropTypes.string.isRequired,
 };

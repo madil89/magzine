@@ -6,6 +6,7 @@ import EditMagazine from './EditMagazine';
 import AdminGallery from './AdminGallery';
 import EditGallery from './EditGallery';
 import MyImages from './MyImages';
+import AdminPhotoGraphy from './AdminPhotoGraphy';
 
 const routes = [
   {
@@ -41,6 +42,13 @@ const routes = [
     path: '/gallery',
     icon: DashboardIcon,
     component: AdminGallery,
+    hidden: false,
+  },
+  {
+    name: 'PhotoGraphy',
+    path: '/photo_graphy',
+    icon: DashboardIcon,
+    component: AdminPhotoGraphy,
     hidden: false,
   },
   {

@@ -9,6 +9,7 @@ import PreviousMagazine from './components/PreviousMagazine';
 import CurrentMagazine from './components/CurrentMagazine';
 import { useMagazines } from './hooks/useMagazines';
 import Gallery from './Pages/UserPages/Gallery';
+import PhotoGraphy from './Pages/UserPages/PhotoGraphy';
 
 function UserMagazine() {
   const { magazines, deleteMagazine } = useMagazines();
@@ -49,6 +50,7 @@ function UserMagazine() {
           onSelected={(magazineId) => navigate(`/magazines/${magazineId}`)}
         />
         <Gallery />
+        <PhotoGraphy />
       </Container>
 
     </div>

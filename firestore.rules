@@ -1,8 +1,14 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+  
+  function signedInOrPublic() {
+      return request.auth != null || 
+      resource.data.magazine_id.size() > 0 || 
+      resource.data.gallery == true;
+    }
     match /userImages/{document} {
-      allow write: if request.auth != null;
+      allow write: if request.auth != null && request.auth.token.admin == true;
       allow read: if true;
     }
     match /magazines/{document} {
