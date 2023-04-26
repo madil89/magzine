@@ -11,7 +11,7 @@ import { useMagazines } from './hooks/useMagazines';
 import Gallery from './Pages/UserPages/Gallery';
 
 function UserMagazine() {
-  const magazineList = useMagazines();
+  const { magazines, deleteMagazine } = useMagazines();
   const [currentMagazine, setCurrentMagazine] = useState(null);
 
   const params = useParams();
@@ -24,27 +24,28 @@ function UserMagazine() {
   React.useEffect(() => {
     const { id } = params;
     if (id) {
-      const mag = magazineList.find((mg) => mg.id === id);
+      const mag = magazines.find((mg) => mg.id === id);
       if (mag) {
         setCurrentMagazine(mag);
       }
     } else {
-      setCurrentMagazine(magazineList[0]);
+      setCurrentMagazine(magazines[0]);
     }
     goToTop();
-  }, [magazineList, params]);
+  }, [magazines, params]);
   const navigate = useNavigate();
   return (
     <div>
       <Container maxWidth="xlg">
         {currentMagazine
-        && <CurrentMagazine magazineList={magazineList} currentMagazine={currentMagazine} />}
+        && <CurrentMagazine magazineList={magazines} currentMagazine={currentMagazine} />}
         {/* <EditorNote /> */}
         <Typography variant="h4" sx={{ marginTop: 10 }}>
           Previous Magazines
         </Typography>
         <PreviousMagazine
-          resource={magazineList}
+          withDelete={false}
+          resource={magazines}
           onSelected={(magazineId) => navigate(`/magazines/${magazineId}`)}
         />
         <Gallery />

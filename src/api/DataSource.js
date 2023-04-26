@@ -2,9 +2,10 @@ import { getAuth } from 'firebase/auth';
 import {
   collection,
   doc, getFirestore,
-  query, setDoc, updateDoc, where, onSnapshot, deleteDoc, getDocs, orderBy,
+  query, setDoc, updateDoc, where, onSnapshot, deleteDoc, getDocs,
 } from 'firebase/firestore';
 
+import firestore from './firestore';
 import functions from './functions';
 
 import firebaseStorage from './firebaseStorage';
@@ -36,7 +37,7 @@ const subscribeUserImages = (userId, onResult) => {
   });
 };
 
-const subscribeMagazineImages = (magazineId, onResult) => {
+const subscribeMagazineImages = (magazineId, onResult, onError) => {
   const q = query(
     collection(db, 'userImages'),
     where('magazine_id', 'array-contains', magazineId),
@@ -49,7 +50,7 @@ const subscribeMagazineImages = (magazineId, onResult) => {
       snapshotResult.push({ id: item.id, ...item.data() });
     });
     onResult(snapshotResult);
-  }, (error) => console.log('error is ', error));
+  }, (error) => onError(error));
 };
 
 const subscribeGalleryImages = (onResult) => {
@@ -81,10 +82,14 @@ const subscribeImages = (onResult) => {
 };
 
 const getMagazineImages = async (magazineId) => {
+  // const q = query(
+  //   collection(db, 'userImages'),
+  //   where('magazine_id', '==', magazineId),
+  // );
   const q = query(
     collection(db, 'userImages'),
-    where('magazine_id', '==', magazineId),
-    orderBy('created_at', 'desc'),
+    where('magazine_id', 'array-contains', magazineId),
+    // orderBy('created_at'),
   );
   const querySnapshot = await getDocs(q);
   const images = [];
@@ -130,4 +135,5 @@ export default {
   subscribeMagazineImages,
   subscribeGalleryImages,
   ...functions,
+  ...firestore,
 };

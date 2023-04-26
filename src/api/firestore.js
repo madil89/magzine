@@ -7,6 +7,7 @@ import {
   doc,
   setDoc,
   updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 
 const MAGAZINES = 'magazines';
@@ -16,8 +17,15 @@ const createNewMagazine = async (file) => {
   const db = getFirestore();
   const docRef = await addDoc(collection(db, MAGAZINES), {
     ...file,
+    created_at: Date.now(),
+    updated_at: Date.now(),
   });
   return docRef.id;
+};
+
+const deleteMagazine = async (id) => {
+  const db = getFirestore();
+  await deleteDoc(doc(db, MAGAZINES, id));
 };
 
 const createNewGallery = async (file) => {
@@ -48,7 +56,7 @@ const getMagazineById = async (id) => {
 const updateMagazine = async (id, magazine) => {
   const db = getFirestore();
   const ref = doc(db, `${MAGAZINES}/${id}`);
-  return updateDoc(ref, { ...magazine });
+  return updateDoc(ref, { ...magazine, updated_at: Date.now() });
 };
 const updateGallery = async (id, gallery) => {
   const db = getFirestore();
@@ -57,6 +65,7 @@ const updateGallery = async (id, gallery) => {
 
 export default {
   createNewMagazine,
+  deleteMagazine,
   getAllMagazines,
   getMagazineById,
   updateMagazine,

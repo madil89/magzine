@@ -15,7 +15,7 @@ function PreviousMagazine({
 
       <Box marginTop={1} marginBottom={10} sx={{ display: 'flex' }}>
         {
-        resource.map((magazine) => (
+        resource.sort((a, b) => b.created_at - a.created_at).map((magazine) => (
           withDelete ? (
             <CoverWithDeleteButton
               key={magazine.id}
@@ -36,6 +36,7 @@ function PreviousMagazine({
 PreviousMagazine.defaultProps = {
   withDelete: false,
   handleMagazineDelete: () => {
+    // eslint-disable-next-line no-console
     console.log('delete funtion is not provided');
   },
 };
