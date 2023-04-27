@@ -21,7 +21,7 @@ function UserLayout() {
 
         <Routes>
           {UserRoutes.map((route) => (
-            <Route key={route.path} exact path={route.path} element={<route.component />} />
+            <Route key={route.id} exact path={route.path} element={<route.component />} />
           ))}
           <Route path="/" element={<UserMagazine />} />
         </Routes>

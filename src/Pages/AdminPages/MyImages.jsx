@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import { LoadingButton } from '@mui/lab';
 import {
   Card, CardActions, Grid,
@@ -20,7 +21,7 @@ function MyImages() {
 
   const addImageMetadata = (images) => images.map((image) => (
     {
-      ...image, tags: ['user_image'], header: '', description: '',
+      ...image, tags: ['user_image'], header: '', description: '', magazine_id: [], sort_order: {},
     }));
 
   const onFileSelect = (selectedFiles) => {
@@ -38,12 +39,28 @@ function MyImages() {
       });
   };
 
+  const handleImageDelete = (_image) => {
+    if (_image.magazine_id && _image.magazine_id.length > 0) {
+      alert('image can not be deleted! because it is used in magazine');
+      return;
+    }
+    DataSource.deleteImage(_image);
+  };
   return (
     <div>
       <Grid container spacing={2} style={{ marginTop: 2 }}>
         {userImages.map((image) => (
           <Grid item key={image.id}>
-            <ImageCard image={image} />
+            <ImageCard
+              image={image}
+              imagePath={DataSource.getUserImagePath()}
+              updateImage={
+                ({ updatedImage }) => DataSource.updateImage(
+                  { path: DataSource.getUserImagePath(), updatedImage },
+                )
+              }
+              deleteImage={(_image) => handleImageDelete(_image)}
+            />
           </Grid>
         ))}
 

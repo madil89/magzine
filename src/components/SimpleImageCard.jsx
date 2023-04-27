@@ -1,5 +1,6 @@
 import {
-  Card, CardActions, CardContent, CardMedia, Chip, IconButton, Typography,
+  Card, CardActions, CardContent,
+  CardMedia, Checkbox, Chip, FormControlLabel, IconButton, Typography,
 } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
@@ -7,7 +8,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import { Delete } from '@mui/icons-material';
-import DataSource from '../api/DataSource';
 
 const RightIconButton = styled((props) => {
   const { expand, ...other } = props;
@@ -20,7 +20,10 @@ const RightIconButton = styled((props) => {
   }),
 }));
 
-function SimpleImageCard({ image, setEditing }) {
+function SimpleImageCard({
+  image, setEditing, deleteImage, makeCoverImage,
+  isCover,
+}) {
   return (
     <Card sx={{ width: 300 }} variant="outlined">
 
@@ -39,8 +42,24 @@ function SimpleImageCard({ image, setEditing }) {
           {image.description}
         </Typography>
         <div style={{ marginTop: '10px' }}>
-          {image.tags.map((tag) => <Chip key={tag} label={tag} />)}
+          {image.tags && image.tags.map((tag) => <Chip key={tag} label={tag} />)}
         </div>
+
+        {makeCoverImage && (
+        <div>
+          <FormControlLabel
+            control={(
+              <Checkbox
+                onChange={(e) => makeCoverImage(e)}
+                checked={isCover}
+              />
+          )}
+            label="Make Cover"
+            name="isCover"
+          />
+
+        </div>
+        )}
 
       </CardContent>
       <CardActions disableSpacing>
@@ -52,9 +71,8 @@ function SimpleImageCard({ image, setEditing }) {
         </IconButton>
         <IconButton onClick={() => setEditing(true)}>
           <EditIcon />
-
         </IconButton>
-        <RightIconButton onClick={() => DataSource.deleteImage(image)}>
+        <RightIconButton onClick={() => deleteImage(image)}>
           <Delete />
         </RightIconButton>
 
@@ -70,8 +88,15 @@ SimpleImageCard.propTypes = {
     description: PropTypes.string,
     id: PropTypes.string,
     header: PropTypes.string,
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   setEditing: PropTypes.func.isRequired,
+  deleteImage: PropTypes.func.isRequired,
+  makeCoverImage: PropTypes.func,
+  isCover: PropTypes.bool,
+};
+SimpleImageCard.defaultProps = {
+  makeCoverImage: null,
+  isCover: false,
 };
 export default SimpleImageCard;

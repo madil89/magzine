@@ -9,33 +9,33 @@ import {
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { ImageCardDnD } from '../../components/ImageCardDnD';
-import { useGalleryImage } from '../../hooks/useGalleryImage';
 import SelectableImage from '../../components/SelectableImage';
 import DataSource from '../../api/DataSource';
+import { usePhotoGraphyImage } from '../../hooks/usePhotoGraphyImage';
 
-function AdminGallery() {
+function AdminPhotoGraphy() {
   const [fileDialogOpen, setFileDialogOpen] = useState(false);
   const [loading] = useState(false);
-  const { galleryImages } = useGalleryImage();
+  const { photoGraphyImages } = usePhotoGraphyImage();
   const handleDialogClose = () => setFileDialogOpen(false);
 
   const addImageToResource = ({ image, checked }) => {
-    const updatedImage = { ...image, gallery: checked };
+    const updatedImage = { ...image, photoGraphy: checked };
     return updatedImage;
   };
   const checkIfImageExists = (image) => {
-    if (image.gallery) return true;
+    if (image.photoGraphy) return true;
     return false;
   };
 
   const removeImageFromGallery = (image) => {
-    const updated = { ...image, gallery: false };
+    const updated = { ...image, photoGraphy: false };
     DataSource.updateImage({ path: DataSource.getUserImagePath(), updatedImage: updated });
   };
   return (
     <div>
       <Grid container spacing={2} alignItems="center" style={{ marginTop: 2 }}>
-        {galleryImages.map((image, index) => (
+        {photoGraphyImages.map((image, index) => (
 
           <Grid item xs={12} lg={4} md={4} key={image.id}>
             <ImageCardDnD
@@ -74,7 +74,7 @@ function AdminGallery() {
         </DialogTitle>
         <DialogContent>
           <SelectableImage
-            resourceId="gallery"
+            resourceId="photoGraphy"
             addImageToResource={addImageToResource}
             checkIfImageExists={checkIfImageExists}
           />
@@ -89,4 +89,4 @@ function AdminGallery() {
   );
 }
 
-export default AdminGallery;
+export default AdminPhotoGraphy;

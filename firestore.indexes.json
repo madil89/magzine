@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "userImages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "magazine_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "userImages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "magazine_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

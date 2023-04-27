@@ -1,14 +1,16 @@
 import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
+import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay, bindKeyboard } from 'react-swipeable-views-utils';
 
 const EnhancedSwipeableViews = bindKeyboard(autoPlay((SwipeableViews)));
 
-function Image({ imageList }) {
+function Image({ imageList, index }) {
+  const [currentIndex, setCurrentIndex] = React.useState(index);
   return (
     <div style={{ background: 'black' }}>
-      <EnhancedSwipeableViews enableMouseEvents interval={3000}>
+      <EnhancedSwipeableViews enableMouseEvents interval={3000} index={currentIndex}>
         {imageList.map((image) => (
           <div key={image.id} style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
             <img
@@ -22,14 +24,16 @@ function Image({ imageList }) {
 
       <Box marginTop={1} marginBottom={10} sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
         {
-        imageList.map((image) => (
+        imageList.map((image, _index) => (
+          /* eslint-disable-next-line jsx-a11y/click-events-have-key-events,
+          jsx-a11y/no-noninteractive-element-interactions */
           <img
             src={image.url}
             style={{ marginTop: 16, marginRight: 16 }}
             height="100vh"
             alt="random"
             key={image.id}
-            // onClick={() => navigate(`/magazines/${magazine.id}`)}
+            onClick={() => setCurrentIndex(_index)}
           />
         ))
       }
@@ -38,6 +42,10 @@ function Image({ imageList }) {
 
   );
 }
+
+Image.defaultProps = {
+  index: 0,
+};
 
 Image.propTypes = {
   imageList: PropTypes.arrayOf(
@@ -48,5 +56,6 @@ Image.propTypes = {
       // author: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
+  index: PropTypes.number,
 };
 export default Image;

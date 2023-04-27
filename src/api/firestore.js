@@ -6,6 +6,8 @@ import {
   getDoc,
   doc,
   setDoc,
+  updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 
 const MAGAZINES = 'magazines';
@@ -15,8 +17,15 @@ const createNewMagazine = async (file) => {
   const db = getFirestore();
   const docRef = await addDoc(collection(db, MAGAZINES), {
     ...file,
+    created_at: Date.now(),
+    updated_at: Date.now(),
   });
   return docRef.id;
+};
+
+const deleteMagazine = async (id) => {
+  const db = getFirestore();
+  await deleteDoc(doc(db, MAGAZINES, id));
 };
 
 const createNewGallery = async (file) => {
@@ -41,12 +50,13 @@ const getAllGalleries = async () => {
 
 const getMagazineById = async (id) => {
   const db = getFirestore();
-  return getDoc(doc(db, `${MAGAZINES}/${id}`)).then((snapShot) => snapShot.data());
+  return getDoc(doc(db, `${MAGAZINES}/${id}`)).then((snapShot) => ({ ...snapShot.data(), id: snapShot.id }));
 };
 
 const updateMagazine = async (id, magazine) => {
   const db = getFirestore();
-  return setDoc(doc(db, MAGAZINES`/${id}`), magazine);
+  const ref = doc(db, `${MAGAZINES}/${id}`);
+  return updateDoc(ref, { ...magazine, updated_at: Date.now() });
 };
 const updateGallery = async (id, gallery) => {
   const db = getFirestore();
@@ -55,6 +65,7 @@ const updateGallery = async (id, gallery) => {
 
 export default {
   createNewMagazine,
+  deleteMagazine,
   getAllMagazines,
   getMagazineById,
   updateMagazine,

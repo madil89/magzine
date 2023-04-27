@@ -10,7 +10,9 @@ import Image from './Image';
 
 const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
-export default function MagazineDialog({ open, onClose, imageList }) {
+export default function MagazineDialog({
+  open, onClose, imageList, index,
+}) {
   const dialogRef = React.useRef();
   const handleClose = () => {
     onClose();
@@ -39,7 +41,7 @@ export default function MagazineDialog({ open, onClose, imageList }) {
 
           </Toolbar>
         </AppBar>
-        <Image imageList={imageList} />
+        <Image imageList={imageList} index={index} />
       </Dialog>
     </div>
   );
@@ -56,4 +58,5 @@ MagazineDialog.propTypes = {
       // author: PropTypes.string.isRequired,
     }).isRequired,
   ).isRequired,
+  index: PropTypes.number.isRequired,
 };

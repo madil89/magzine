@@ -5,7 +5,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import DataSource from '../api/DataSource';
 
 const RightIconButton = styled((props) => {
   const { expand, ...other } = props;
@@ -18,15 +17,16 @@ const RightIconButton = styled((props) => {
   }),
 }));
 
-function EditableImageCard({ image, setEditing }) {
-  const [imageMetaData, setimageMetaData] = useState({ ...image, header: image.header ? image.header : '' });
-  const [newTags, setNewTags] = useState(image.tags.join(','));
+function EditableImageCard({
+  image, setEditing, updateImage,
+}) {
+  const [imageData, setImageData] = useState({ ...image, header: image.header ? image.header : '' });
+  const [newTags, setNewTags] = useState(image.tags ? image.tags.join(',') : '');
   const handleSave = () => {
     const newTagsArray = newTags.split(',');
-    DataSource.updateImageMetadata(
-      image.id,
-      { ...imageMetaData, tags: newTagsArray },
-    );
+    updateImage({
+      updatedImage: { ...imageData, tags: newTagsArray },
+    });
     setEditing(false);
   };
   return (
@@ -40,16 +40,16 @@ function EditableImageCard({ image, setEditing }) {
       <CardContent>
 
         <TextareaAutosize
-          value={imageMetaData.header}
-          onChange={(e) => setimageMetaData({ ...imageMetaData, header: e.target.value })}
+          value={imageData.header}
+          onChange={(e) => setImageData({ ...imageData, header: e.target.value })}
           placeholder="Add Header"
           variant="standard"
           minRows={2}
           style={{ width: '100%' }}
         />
         <TextareaAutosize
-          value={imageMetaData.description}
-          onChange={(e) => setimageMetaData({ ...imageMetaData, description: e.target.value })}
+          value={imageData.description}
+          onChange={(e) => setImageData({ ...imageData, description: e.target.value })}
           placeholder="Add Description"
           variant="standard"
           minRows={3}
@@ -73,8 +73,9 @@ EditableImageCard.propTypes = {
     description: PropTypes.string,
     header: PropTypes.string,
     id: PropTypes.string,
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   setEditing: PropTypes.func.isRequired,
+  updateImage: PropTypes.func.isRequired,
 };
 export default EditableImageCard;

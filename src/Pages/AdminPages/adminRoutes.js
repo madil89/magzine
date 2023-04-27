@@ -1,16 +1,17 @@
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import Dashboard from './Dashboard';
+import Dashboard from './AdminDashboard';
 import Magazines from './Magazines';
 import EditMagazine from './EditMagazine';
 import AdminGallery from './AdminGallery';
 import EditGallery from './EditGallery';
 import MyImages from './MyImages';
+import AdminPhotoGraphy from './AdminPhotoGraphy';
 
 const routes = [
   {
-    name: 'Dashbaord',
-    path: '/dashboard',
+    name: 'Users',
+    path: '/users',
     icon: DashboardIcon,
     component: Dashboard,
     hidden: false,
@@ -41,6 +42,13 @@ const routes = [
     path: '/gallery',
     icon: DashboardIcon,
     component: AdminGallery,
+    hidden: false,
+  },
+  {
+    name: 'PhotoGraphy',
+    path: '/photo_graphy',
+    icon: DashboardIcon,
+    component: AdminPhotoGraphy,
     hidden: false,
   },
   {
